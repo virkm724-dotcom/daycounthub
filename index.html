@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Working Days Calculator – Canada</title>
+  <meta name="description" content="Calculate working days, weekends, and public holidays in Canada for any year. Simple, fast, and free.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    }
+    h1 {
+      text-align: center;
+    }
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #2c7be5;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1a5dc9;
+    }
+    .results {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #555;
+    }
+    footer a {
+      color: #555;
+      text-decoration: none;
+      margin: 0 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Working Days Calculator (Canada)</h1>
+
+  <label for="year">Select Year:</label>
+  <select id="year"></select>
+
+  <button onclick="calculate()">Calculate</button>
+
+  <div class="results" id="results" style="display:none;"></div>
+
+  <p style="margin-top:20px;">
+    This tool calculates working days in Canada by excluding weekends and official public holidays.
+    It is useful for planning work schedules, payroll, and projects.
+  </p>
+</div>
+
+<footer>
+  <a href="about.html">About</a> |
+  <a href="privacy.html">Privacy Policy</a> |
+  <a href="contact.html">Contact</a>
+  <br><br>
+  © 2026 DayCountHub
+</footer>
+
+<script>
+  const yearSelect = document.getElementById("year");
+  const currentYear = new Date().getFullYear();
+
+  for (let y = currentYear - 5; y <= currentYear + 10; y++) {
+    const option = document.createElement("option");
+    option.value = y;
+    option.text = y;
+    if (y === currentYear) option.selected = true;
+    yearSelect.appendChild(option);
+  }
+
+  function calculate() {
+    const year = parseInt(yearSelect.value);
+    let totalDays = isLeapYear(year) ? 366 : 365;
+    let weekendDays = countWeekends(year);
+
+    let publicHolidays = 10; // simple fixed number for now (safe starter)
+
+    let workingDays = totalDays - weekendDays - publicHolidays;
+
+    const resultsDiv = document.getElementById("results");
+    resultsDiv.style.display = "block";
+    resultsDiv.innerHTML = `
+      <strong>Results for ${year}:</strong><br><br>
+      Total days: ${totalDays}<br>
+      Weekend days: ${weekendDays}<br>
+      Public holidays: ${publicHolidays}<br><br>
+      <strong>Working days: ${workingDays}</strong>
+    `;
+  }
+
+  function isLeapYear(year) {
+    return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+  }
+
+  function countWeekends(year) {
+    let weekends = 0;
+    for (let m = 0; m < 12; m++) {
+      for (let d = 1; d <= 31; d++) {
+        const date = new Date(year, m, d);
+        if (date.getMonth() !== m) break;
+        const day = date.getDay();
+        if (day === 0 || day === 6) weekends++;
+      }
+    }
+    return weekends;
+  }
+</script>
+
+</body>
+</html>
